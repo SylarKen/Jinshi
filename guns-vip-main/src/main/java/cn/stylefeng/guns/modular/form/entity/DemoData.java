@@ -1,0 +1,40 @@
+package cn.stylefeng.guns.modular.form.entity;
+
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.afterturn.easypoi.excel.annotation.ExcelEntity;
+import cn.afterturn.easypoi.excel.annotation.ExcelIgnore;
+import lombok.Data;
+
+import java.util.Date;
+
+/**
+ * @Author: rednoob
+ * @Describe: 测试POI导出功能
+ *              参考作用
+ */
+@Data
+public class DemoData {
+    /**
+     * id
+     */
+    private String        id;
+    /**
+     * 学生姓名
+     */
+    @Excel(name = "学生姓名", height = 20, width = 30, isImportField = "true_st")
+    private String        name;
+    /**
+     * 学生性别
+     */
+    @Excel(name = "学生性别", replace = { "男_1", "女_2" }, suffix = "生", isImportField = "true_st")
+    private int           sex;
+
+    @Excel(name = "出生日期", databaseFormat = "yyyyMMddHHmmss", format = "yyyy-MM-dd", isImportField = "true_st", width = 20)
+    private Date          birthday;
+
+    @Excel(name = "进校日期", databaseFormat = "yyyyMMddHHmmss", format = "yyyy-MM-dd")
+    private Date registrationDate;
+
+    @Excel(name = "岁数", isStatistics = true)
+    private int age;
+}

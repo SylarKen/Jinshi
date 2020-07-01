@@ -1,0 +1,136 @@
+@layout("/common/_container.html",{css:["/assets/form/form.css"]}){
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">时间:</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" type="text" id="Date" name="Date" autocomplete="off"
+                                       lay-verify="required"/>
+                            </div>
+                            <label class="layui-form-label">选择园区:</label>
+                            <div class="layui-input-inline">
+                                <select class="layui-input" id="areaCode" name="areaCode" lay-filter="areaCode" lay-verity="required">
+                                    <option value="未知">无数据</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                                </button>
+                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出
+                                </button>
+                            </div>
+                        </div>
+                        <table class="layui-table" id="weighRecord" lay-filter="weighRecord"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+@}
+<script>
+    layui.use(['table', 'admin', 'ax', 'laydate'], function () {
+        var $ = layui.$;
+        var table = layui.table;
+        var $ax = layui.ax;
+        var admin = layui.admin;
+        const laydate = layui.laydate;
+        laydate.render({
+            elem: '#Date',
+            type: 'month',
+            value: new Date(),
+            position: 'fixed',
+            trigger: 'click'
+        });
+        /**
+         * 数据管理
+         */
+        let weighRecord = {
+            tableId: 'weighRecord'
+        };
+        weighRecord.initColumn = function () {
+            return [[
+                //
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', sort: true},
+                {field: 'plate_number', title: '车牌号', sort: true},
+                {field: 'weighbridge_code', title: '地磅编号', sort: true},
+                {field: 'tare', title: '皮重', sort: true},
+                {field: 'gross', title: '毛重', sort: true},
+                {field: 'time_weigh', title: '称重时间'},
+                {field: 'work_area', title: '所在工区'}
+            ]];
+        };
+        /**
+         * 点击查询按钮
+         */
+        weighRecord.search = function () {
+            var queryData = {};
+            queryData['month'] = $("#Date").val();
+            queryData['areaCode'] = $("select[name=areaCode]").val();
+            table.reload(weighRecord.tableId, {
+                where: queryData, page: {curr: 1}
+            });
+        };
+        /**
+         * 导出excel按钮
+         */
+        weighRecord.exportExcel = function () {
+            window.location.href = Feng.ctxPath + "/reports/getReportByMonth?Date=" + $("#Date").val() +
+                "&areaCode=" + $("select[name=areaCode]").val();
+        }
+        // 渲染表格
+        var tableResult = table.render({
+            elem: '#' + weighRecord.tableId,
+            url: Feng.ctxPath + '/weighRecord/listByCondition',
+            height: "full-98",
+            cellMinWidth: 100,
+            text: {
+                none: '未查找到数据,请联系管理员'
+            },
+            even: true,
+            method: 'get',
+            limit: 10,
+            page: true,
+            cols: weighRecord.initColumn(),
+            done: function (res, curr, count) {
+                $("[data-field = 'vehicle_type']").children().each(function () {
+                    if ($(this).text() == '1') {
+                        $(this).text("卡车");
+                    } else if ($(this).text() == '0') {
+                        $(this).text("其他车");
+                    }
+                });
+            }
+        });
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            weighRecord.search();
+        });
+        // 导出excel
+        $('#btnExp').click(function () {
+            weighRecord.exportExcel();
+        });
+        $.ajax({
+            url: Feng.ctxPath + "/workArea/queryAllWorkArea",
+            async: false,
+            dataType: "json",
+            type: "get",
+            success: function (data) {
+                if (data.code == 200) {
+                    let html = "";
+                    $.each(data.data, function (i, workArea) {
+                        html += "<option class='layui-input' value='" + workArea.workArea + "'>" + workArea.workArea + "</option>";
+                    });
+                    $("#areaCode").html(html);
+                    layui.form.render("select");
+                }
+            }
+        });
+    })
+</script>

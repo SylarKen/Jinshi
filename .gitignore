@@ -1,0 +1,6 @@
+# Project exclude paths
+/guns-base-support/guns-base/target/
+/guns-base-support/guns-base-auth/target/
+/guns-base-support/guns-dbctn/target/
+/guns-base-support/guns-sys/target/
+/guns-vip-main/target/

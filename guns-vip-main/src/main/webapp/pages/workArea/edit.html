@@ -1,0 +1,64 @@
+@layout("/common/_container.html",{css:["/assets/form/weighRecord/weighRecord_edit.css"]}){
+<form class="layui-form" id="DemoFrom" lay-filter="DemoFrom">
+    <h1>工区修改</h1>
+    <input type="hidden" name="id"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">工区名称:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="workArea" style="border-radius: 20px" readonly/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="margin: 0 auto">
+            <button class="layui-btn" lay-submit lay-filter="">修改</button>
+            <input type="reset" class="layui-btn layui-btn-primary"/>
+        </div>
+    </div>
+</form>
+@}
+<script>
+    layui.use(['layer', 'form', 'laydate', 'ax', 'jquery', 'admin'], function () {
+        let laydate = layui.laydate,
+            $ = layui.jquery;
+        let layer = layui.layer;
+        let form = layui.form;
+        let $ax = layui.ax;
+        let admin = layui.admin;
+
+        //获取用户信息
+        var ajax = new $ax(Feng.ctxPath + "/workArea/getInfo?id=" + Feng.getUrlParam("id"));
+        var result = ajax.start();
+        form.val('DemoFrom', result);
+        //拿取值
+        let workArea;
+        $("input[name=workArea]").blur(function () {
+            workArea = $(this).val();
+        });
+        $(":button").click(function () {
+            //自动获取焦点
+            $("input[type=text]").trigger("blur");
+            let str = "";
+            $.ajax({
+                url: "/workArea/update",
+                data: "id=" + $('input[name=id]').val()
+                    + "&workArea=" + workArea,
+                async: false,
+                dataType: "text",
+                type: "post",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.success == true) {
+                        admin.putTempData('formOk', true);
+                        parent.layer.close(parent.layer.getFrameIndex(window.name));
+                        return;
+                    }
+                    layer.msg(data.message);
+                    return false;
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        });
+    });
+</script>

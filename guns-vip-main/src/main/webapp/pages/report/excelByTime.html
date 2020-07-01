@@ -1,0 +1,182 @@
+@layout("/common/_container.html",{css:["/assets/form/form.css"]}){
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="beginTime" class="layui-input" type="text" placeholder="开始时间" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="endTime" class="layui-input" type="text" placeholder="结束时间" autocomplete="off"/>
+                            </div>
+                            <label class="layui-form-label">选择车辆:</label>
+                            <div class="layui-input-inline">
+                                <select class="layui-input" id="plateNumber" name="plateNumber" lay-filter="plateNumber"
+                                        lay-verity="required" lay-search="" autocomplete="off">
+                                    <option value="1">无数据</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                                </button>
+                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出
+                                </button>
+                            </div>
+                        </div>
+                        <table class="layui-table" id="weighRecord" lay-filter="weighRecord"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@}
+<script>
+    layui.use(['table', 'admin', 'ax', 'laydate', 'layer'], function () {
+        var $ = layui.$;
+        var table = layui.table;
+        var $ax = layui.ax;
+        var admin = layui.admin;
+        var layer = layui.layer;
+
+        /**
+         * 数据管理
+         */
+        let weighRecord = {
+            tableId: 'weighRecord'
+        };
+        weighRecord.initColumn = function () {
+            return [[
+                //
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', sort: true},
+                {field: 'plate_number', title: '车牌号', sort: true},
+                {field: 'weighbridge_code', title: '地磅编号', sort: true},
+                {field: 'tare', title: '皮重', sort: true},
+                {field: 'gross', title: '毛重', sort: true},
+                {field: 'time_weigh', title: '称重时间'},
+                {field: 'work_area', title: '所在工区'}
+            ]];
+        };
+        /**
+         * 点击查询按钮
+         */
+        weighRecord.search = function () {
+            var queryData = {};
+            queryData['beginTime'] = $("#beginTime").val();
+            queryData['endTime'] = $("#endTime").val();
+            queryData['plateNumber'] = $("#plateNumber").val();
+            table.reload(weighRecord.tableId, {
+                where: queryData, page: {curr: 1}
+            });
+        };
+        /**
+         * 导出excel按钮
+         */
+        weighRecord.exportExcel = function () {
+            /* var checkRows = table.checkStatus(weighRecord.tableId);
+            if (checkRows.data.length === 0) {
+                Feng.error("请选择要导出的数据");
+            } else {
+                table.exportFile(tableResult.config.id, checkRows.data, 'xls');
+            }*/
+            window.location.href = Feng.ctxPath + "/reports/getDailyReport?beginTime=" + $("#beginTime").val() +
+                                                                        "&endTime=" + $("#endTime").val() +
+                                                                        "&plateNumber=" + $("#plateNumber").val();
+            //layer.msg($("#Date").val())
+        }
+        // 渲染表格
+        var tableResult = table.render({
+            elem: '#' + weighRecord.tableId,
+            url: Feng.ctxPath + '/weighRecord/listByCondition',
+            height: "full-98",
+            cellMinWidth: 100,
+            text: {
+                none: '未查找到数据,请联系管理员'
+            },
+            even: true,
+            method: 'get',
+            limit: 10,
+            page: true,
+            cols: weighRecord.initColumn(),
+            done: function (res, curr, count) {
+                $("[data-field = 'vehicle_type']").children().each(function () {
+                    if ($(this).text() == '1') {
+                        $(this).text("卡车");
+                    } else if ($(this).text() == '0') {
+                        $(this).text("其他车");
+                    }
+                });
+            }
+        });
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            weighRecord.search();
+        });
+        // 导出excel
+        $('#btnExp').click(function () {
+            weighRecord.exportExcel();
+        });
+        const laydate = layui.laydate;
+        var now = new Date();
+        console.log(now)
+        //渲染时间选择框
+        let startTime = laydate.render({
+            elem: '#beginTime',
+            type: 'datetime',
+            //max: now.toLocaleString(),
+            done: function (value, date) {
+                endTime.config.min = {
+                    year:date.year,
+                    month:date.month-1,//注意是month-1，写在date上的话你后边的日期选择不了
+                    date: date.date,
+                    hours: 0,
+                    minutes: 0,
+                    seconds : 0
+
+                }
+            }
+        });
+        //渲染时间选择框
+        let endTime = laydate.render({
+            elem: '#endTime',
+           // max: now.toLocaleDateString(),
+            type: 'datetime',
+            done: function (value, date) {
+                startTime.config.max = {
+                    year:date.year,
+                    month:date.month-1,//注意是month-1，写在date上的话你后边的日期选择不了
+                    date: date.date,
+                    hours: 23,
+                    minutes: 59,
+                    seconds : 59
+                }
+
+            }
+        });
+        $.ajax({
+            url: Feng.ctxPath + "/reports/getCars",
+            async: false,
+            dataType: "json",
+            type: "get",
+            success: function (data) {
+                if (data.code == 200) {
+                    let html = "<option value=''>直接选择或搜索选择</option>";
+                    $.each(data.data, function (i, car) {
+                        html += "<option class='layui-input' value='" + car.id + "'>" + car.plateNumber + "</option>";
+                    });
+                    $("#plateNumber").html(html);
+                    layui.form.render("select");
+                }
+                return;
+            },
+            error: function (err) {
+
+            }
+        });
+    });
+</script>

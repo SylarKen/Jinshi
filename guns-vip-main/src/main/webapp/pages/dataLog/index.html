@@ -1,0 +1,45 @@
+@layout("/common/_container.html",{js:["/assets/form/dataLog/dataLog.js"],css:["/assets/form/form.css"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">日志管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="beginTime" class="layui-input" type="text" placeholder="开始时间" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="endTime" class="layui-input" type="text" placeholder="结束时间" autocomplete="off"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                @if(shiro.hasPermission("/dataLog/add")){
+                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                                @}
+                                <!--<button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>-->
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="dataLog" lay-filter="dataLog"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if(shiro.hasPermission("/dataLog/edit") || shiro.hasPermission("/dataLog/delete")){
+<script type="text/html" id="tableBar">
+    @if(shiro.hasPermission("/dataLog/edit")){
+    <a class="layui-btn layui-btn-primary layui-btn-xs" style="color: #00a0e9" lay-event="edit">${lang.get("BTN_EDIT","编辑")}</a>
+    @}
+    @if(shiro.hasPermission("/dataLog/delete")){
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">${lang.get("BTN_DELETE","删除")}</a>
+    @}
+</script>
+@}
+@}

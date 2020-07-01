@@ -1,0 +1,139 @@
+@layout("/common/_container.html",{css:["/assets/form/form.css"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">工区管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-inline">
+                            <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="workArea" lay-filter="workArea"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if(shiro.hasPermission("/workArea/edit") || shiro.hasPermission("/workArea/delete")){
+<script type="text/html" id="tableBar">
+    @if(shiro.hasPermission("/workArea/edit")){
+    <a class="layui-btn layui-btn-primary layui-btn-xs" style="color: #00a0e9" lay-event="edit">${lang.get("BTN_EDIT","编辑")}</a>
+    @}
+    @if(shiro.hasPermission("/workArea/delete")){
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">${lang.get("BTN_DELETE","删除")}</a>
+    @}
+</script>
+@}
+@}
+<script>
+    layui.use(['table', 'admin', 'ax', 'laydate'], function () {
+        var $ = layui.$;
+        var table = layui.table;
+        var $ax = layui.ax;
+        var admin = layui.admin;
+        const laydate = layui.laydate;
+        /**
+         * 数据管理
+         */
+        let workArea = {
+            tableId: 'workArea'
+        };
+        workArea.initColumn = function () {
+            return [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', sort: true},
+                {field: 'work_area', title: '所在工区'},
+                {align: 'center', toolbar: '#tableBar', width: 120}
+            ]];
+        };
+        // 渲染表格
+        var tableResult = table.render({
+            elem: '#' + workArea.tableId,
+            url: Feng.ctxPath + '/workArea/queryWorkArea',
+            height: "full-98",
+            cellMinWidth: 100,
+            text: {
+                none: '未查找到数据,请联系管理员'
+            },
+            even: true,
+            method: 'get',
+            limit: 10,
+            page: true,
+            cols: workArea.initColumn()
+        });
+        // 添加按钮点击事件
+        $('#btnAdd').click(function () {
+            workArea.openAddWorkArea();
+        });
+        /**
+         * 弹出添加对话框
+         */
+        workArea.openAddWorkArea = function () {
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                title: '工区添加',
+                content: Feng.ctxPath + '/workArea/add',
+                area: ['800px', '600px'],
+                shade: [0.8, '#393D49'],
+                btnAlign: 'c',
+                anim: 5,
+                end: function () {
+                    table.reload(workArea.tableId);
+                }
+            });
+        };
+        // 工具条点击事件
+        table.on('tool(' + workArea.tableId + ')', function (obj) {
+                var data = obj.data;
+                var layEvent = obj.event;
+                if (layEvent === 'delete') {
+                    workArea.onDeleteItem(data);
+                } else if (layEvent === 'edit') {
+                    workArea.onEditItem(data);
+                }
+            }
+        );
+        workArea.onDeleteItem = function (data) {
+            var operation = function () {
+                var ajax = new $ax(Feng.ctxPath + "/workArea/delete", function (data) {
+                    if (data.code == '200') {
+                        Feng.success("删除成功!");
+                        table.reload(workArea.tableId);
+                    } else {
+                        Feng.error(data.message);
+                    }
+
+                }, function (data) {
+                    Feng.error("删除失败!" + data.responseJSON.message + "!");
+                });
+                ajax.set("workAreaId", data.id);
+                ajax.start();
+            };
+            Feng.confirm("是否删除?", operation);
+        };
+        workArea.onEditItem = function (data) {
+            //----点击更新-----
+            admin.putTempData('formOk', false);
+            top.layui.admin.open({
+                type: 2,
+                title: '地磅修改',
+                content: Feng.ctxPath + '/workArea/edit?id=' + data.id,
+                area: ['800px', '600px'],
+                btn: ['暂不进行修改'],
+                shade: [0.8, '#393D49'],
+                btnAlign: 'c',
+                anim: 5,
+                end: function () {
+                    table.reload(workArea.tableId);
+                }
+            });
+        }
+    });
+</script>

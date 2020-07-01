@@ -1,0 +1,84 @@
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">-->
+<!--    <head>-->
+<!--        <meta charset="UTF-8">-->
+<!--        <title>Title</title>-->
+<!--        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+<!--        <script src="/assets/plugins/jquery/dist/jquery.js"></script>-->
+<!--    </head>-->
+<!--    <body>-->
+        @layout("/common/_container.html",{js:["/assets/plugins/jquery/dist/jquery.js"],css:[]}){
+        <div id="app">
+            asdfasdf
+        </div>
+        <div>
+            <button onclick="btn_click(1)">开测试</button>
+            <button onclick="btn_click(0)">关测试</button>
+            <br/>
+            <br/>
+            <input type="text" id="txt_ip" value="192.168.9.109">
+            <input type="text" id="txt_msm" value="">
+
+            <button onclick="btn_led_click()">Led测试</button>
+            <br/>
+            <br/>
+<!--            <button onclick="btn_value_click()">Value测试</button>-->
+        </div>
+        <script>
+            function btn_click(key) {
+                $.post({
+                    url: '/testweigh/sendtest',
+                    data: {key: key},
+                    success: function (response) {
+                        // alert(1111);
+                    }
+                })
+            }
+
+            function btn_led_click() {
+                var ip = $("#txt_ip").val();
+                var text = $("#txt_msm").val();
+                $.post({
+                    url: '/testweigh/sendledtest',
+                    data: {ip: ip, text: text},
+                    success: function (response) {
+                        // alert(1111);
+                    }
+                })
+            }
+
+            function btn_value_click() {
+                $.post({
+                    url: '/testweigh/valuetest',
+                    data: {},
+                    success: function (response) {
+                        // alert(1111);
+                    }
+                })
+            }
+
+            function getWeight() {
+                $.ajax({
+                    url: '/testweigh/getweight',
+                    type: 'POST',
+                    data: {},
+                    dataType: "text",
+                    success: function (response) {
+                        console.log(response);
+                        $("#app").empty().text(response);
+                        // if (response.result) {
+                        //     console.log(response);
+                        // }
+                    }
+                });
+            }
+
+            window.setInterval(function () {
+                getWeight();
+            }, 100);
+        </script>
+        @}
+<!--    </body>-->
+<!--</html>-->
+

@@ -1,0 +1,68 @@
+@layout("/common/_container.html",{js:["/assets/form/weighRecord/weighRecord_edit.js"],css:["/assets/form/weighRecord/weighRecord_edit.css"]}){
+<form class="layui-form" id="DemoFrom" lay-filter="DemoFrom">
+    <h1>数据修改</h1>
+    <input type="hidden" name="id"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">车牌号:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="plateNumber" style="border-radius: 20px" readonly/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地磅编号:</label>
+        <div class="layui-input-inline">
+            <select class="layui-input" id="weighbridgeCode" name="weighbridgeCode" lay-filter="weighbridgeCode" lay-verity="required">
+                <option value="0">无数据</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">皮重:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="tare" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">毛重:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="gross" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">称重时间:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" id="timeWeigh" name="timeWeigh"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="margin: 0 auto">
+            <button class="layui-btn" lay-submit lay-filter="">修改</button>
+            <input type="reset" class="layui-btn layui-btn-primary"/>
+        </div>
+    </div>
+</form>
+@}
+<script>
+    layui.use(['jquery'], function () {
+        const $ = layui.jquery;
+        $.ajax({
+            url: Feng.ctxPath + "/reports/getWcs",
+            async: false,
+            dataType: "json",
+            type: "get",
+            success: function (data) {
+                if (data.code == 200) {
+                    let html = "";
+                    $.each(data.data, function (i, pound) {
+                        html += "<option class='layui-input' value='"+pound.weightbridgeCode+"'>"+pound.name+"</option>";
+                    });
+                    $("#weighbridgeCode").html(html);
+                }
+                return ;
+            },
+            error: function (err) {
+
+            }
+        });
+    });
+</script>

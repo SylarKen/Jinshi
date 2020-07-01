@@ -1,0 +1,60 @@
+@layout("/common/_container.html",{js:["/assets/form/vehicle/vehicle.js"],css:["/assets/form/form.css"]}){
+<div class="layui-body-header">
+    <span class="layui-body-header-title">车辆管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="plateNumber" class="layui-input" type="text" placeholder="车牌号"/>
+                            </div>
+                            <label class="layui-form-label">选择园区:</label>
+                            <div class="layui-input-inline">
+                                <select class="layui-input" id="areaCode" name="areaCode" lay-filter="areaCode" lay-verity="required">
+                                    <option value="未知">无数据</option>
+                                </select>
+                            </div>
+                            <label class="layui-form-label">选择车辆类型:</label>
+                            <div class="layui-input-inline">
+                                <select class="layui-input" name="vehicleType" id="vehicleType" lay-filter="vehicleType" lay-verity="required">
+                                    <option value="1">运输车辆</option>
+                                    <option value="0">其他车</option>
+                                    <option value="2">叉装车辆</option>
+                                    <option value="3">挖掘机</option>
+                                    <option value="4">洒水车</option>
+                                    <option value="5">维修车辆</option>
+                                    <option value="6">管理车辆</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                @if(shiro.hasPermission("/vehicle/add")){
+                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                                @}
+                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出所有车量</button>
+                                <button id="btnExp1" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出筛选后车辆</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="vehicle" lay-filter="vehicle"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if(shiro.hasPermission("/vehicle/edit") || shiro.hasPermission("/vehicle/delete")){
+<script type="text/html" id="tableBar">
+    @if(shiro.hasPermission("/vehicle/edit")){
+    <a class="layui-btn layui-btn-primary layui-btn-xs" style="color: #00a0e9" lay-event="edit">${lang.get("BTN_EDIT","编辑")}</a>
+    @}
+    @if(shiro.hasPermission("/vehicle/delete")){
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">${lang.get("BTN_DELETE","删除")}</a>
+    @}
+</script>
+@}
+@}

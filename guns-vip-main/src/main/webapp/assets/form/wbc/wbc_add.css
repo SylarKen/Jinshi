@@ -1,0 +1,19 @@
+body {
+    display: -ms-flexbox;
+    /* 使用flex布局 */
+    display: flex;
+    /* 兼容ie10垂直居中 */
+    -ms-flex-align: center;
+    /* 垂直居中 */
+    align-items: center;
+    /* 水平居中 */
+    justify-content: center;
+    // background-color: #1c1c1c;
+}
+
+h1 {
+    text-align: center;
+    font-family: 宋体;
+    color: white;
+    margin-bottom: 20px;
+}

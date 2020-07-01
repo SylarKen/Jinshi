@@ -1,0 +1,28 @@
+body {
+    display: -ms-flexbox;
+    /* 使用flex布局 */
+    display: flex;
+    /* 兼容ie10垂直居中 */
+    -ms-flex-align: center;
+    /* 垂直居中 */
+    align-items: center;
+    /* 水平居中 */
+    justify-content: center;
+    //background-color: #1c1c1c;
+    //color: white;
+}
+
+form {
+    text-align: center;
+    font-family: 新宋体;
+}
+
+h1 {
+    font-family: 宋体;
+}
+
+/*覆盖 layui样式*/
+.layui-form-selected dl {
+    display: block;
+    color: black;
+}

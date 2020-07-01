@@ -1,0 +1,68 @@
+@layout("/common/_container.html",{js:["/assets/form/vehicle/vehicle_add.js"],css:["/assets/form/vehicle/vehicle_add.css","/assets/form/vehicle/vehicle-select.css"]}){
+<form class="layui-form">
+    <h3 style="text-align: center">添加车辆</h3>
+    <div class="layui-form-item">
+        <label class="layui-form-label">请输入车辆车牌号:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="plateNumber" lay-verify="required|plateNumber" placeholder="请输入车辆车牌号"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">请输入车辆皮重:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="tare" lay-verify="required|tare" placeholder="请输入车辆皮重"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">请输入车辆载重:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="loads" lay-verify="required|loads" placeholder="请输入车辆载重"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择车辆类型:</label>
+        <div class="layui-input-inline">
+            <select name="vehicleType" lay-filter="vehicleType" lay-verity="required|vehicleType">
+                <option value="1">运输车辆</option>
+                <option value="0">其他车</option>
+                <option value="2">叉装车辆</option>
+                <option value="3">挖掘机</option>
+                <option value="4">洒水车</option>
+                <option value="5">维修车辆</option>
+                <option value="6">管理车辆</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择园区:</label>
+        <div class="layui-input-inline">
+            <select class="layui-input" id="workArea" name="workArea" lay-filter="workArea" lay-verity="required">
+                <option value="未知">无数据</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否白名单:</label>
+        <div class="layui-input-inline">
+            <select class="layui-input" name="status" lay-filter="status" lay-verity="required">
+                <option value="ENABLE">是</option>
+                <option value="DISENABLE">否</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="margin: 0 auto">
+            <button class="layui-btn layui-btn-radius" style="background-color: purple" lay-submit id="sub"
+                    lay-filter="addSubmit">立即提交
+            </button>
+            <input type="reset" class="layui-btn layui-btn-primary"/>
+        </div>
+    </div>
+
+</form>
+@}

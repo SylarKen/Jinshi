@@ -1,0 +1,90 @@
+@layout("/common/_container.html",{js:["/assets/form/wbc/wbc_add.js"],css:["/assets/form/wbc/wbc_add.css"]}){
+<form class="layui-form">
+    <h3 style="text-align: center">添加地磅</h3>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地磅编号:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="weightbridgeCode" lay-verify="required|weightbridgeCode" placeholder="请输入地磅编号"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地磅名称:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" lay-verify="required|name" placeholder="请输入地磅名称"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地磅类型:</label>
+        <div class="layui-input-inline">
+            <input type="number" name="type" lay-verify="required|type" placeholder="请输入地磅类型"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地磅称重上限:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="toplimit" lay-verify="required|toplimit" placeholder="请输入地磅称重上限"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">仪表IP地址:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ipMeter" lay-verify="required|ipMeter" placeholder="请输入仪表IP地址"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">车牌识别摄像机IP地址:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ipCamera" lay-verify="required|ipCamera" placeholder="请输入车牌识别摄像机IP地址"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">LED指示牌IP地址:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ipLed" lay-verify="required|ipLed" placeholder="请输入LED指示牌IP地址"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">起落杆IP地址:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ipControlbox" lay-verify="required|ipControlbox" placeholder="请输入起落杆IP地址"
+                   autocomplete="off" class="layui-input" style="border-radius:20px">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">设备是否可用:</label>
+        <div class="layui-input-inline">
+            <select name="available" lay-filter="available" lay-verity="required|available">
+                <option value="1">设备可用</option>
+                <option value="0">设备不可用</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">设备是否在线:</label>
+        <div class="layui-input-inline">
+            <select name="isOnline" lay-verity="required">
+                <option value="1">设备在线</option>
+                <option value="0">设备不在线</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item"  style="margin-left: 50px">
+        <div class="layui-input-inline">
+            <button class="layui-btn layui-btn-radius" style="background-color: purple" lay-submit id="sub"
+                    lay-filter="addSubmit">立即提交
+            </button>
+            <button class="layui-btn layui-btn-radius layui-btn-primary" type="reset">重置</button>
+        </div>
+    </div>
+
+</form>
+@}

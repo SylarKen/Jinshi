@@ -1,0 +1,81 @@
+@layout("/common/_container.html",{js:["/assets/form/wbc/wbc_edit.js"],css:["/assets/form/wbc/wbc_edit.css"]}){
+<form class="layui-form" id="wbcFrom" lay-filter="wbcFrom">
+    <h1>地磅修改</h1>
+    <input type="hidden" name="id"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地磅编号:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="weightbridgeCode" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地磅名称:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="name" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地磅类型:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="type" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">称重上限:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="toplimit" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">仪表IP地址:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="ipMeter" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">车牌识别摄像机IP地址:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="ipCamera" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">LED指示牌IP地址:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="ipLed" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">起落杆IP地址:</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" name="ipControlbox" style="border-radius: 20px"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">设备是否可用:</label>
+        <div class="layui-input-inline">
+            <select name="available" lay-filter="available" lay-verity="required|available">
+                <option value="1">设备可用</option>
+                <option value="0">设备不可用</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">设备是否在线:</label>
+        <div class="layui-input-inline">
+            <select name="isOnline" lay-verity="required">
+                <option value="1">设备在线</option>
+                <option value="0">设备不在线</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="margin: 0 auto">
+            <!--
+                lay-submit	无需填写值,绑定触发提交的元素，如button
+            -->
+            <button class="layui-btn" lay-submit lay-filter="">修改</button>
+            <input type="reset" class="layui-btn layui-btn-primary"/>
+        </div>
+    </div>
+</form>
+@}
